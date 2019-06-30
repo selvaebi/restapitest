@@ -7,10 +7,14 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"first_name", "last_name"})})
 public class Person {
 
     @Id
@@ -29,6 +33,7 @@ public class Person {
 
     @ApiModelProperty(position = 3, required = true)
     @NotNull
+    @Min(1)
     @Column(nullable = false)
     private int age;
 
