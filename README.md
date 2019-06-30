@@ -66,7 +66,7 @@ To add more security users we can post user entity logged in using admin credent
 If we don't want to install maven or jdk locally we can create a container for the application
 with dependencies like maven jdk , build and run the container.
 
-#### Prerequesities
+#### Prerequisite
   * Docker installed
   
 #### Build the docker image
