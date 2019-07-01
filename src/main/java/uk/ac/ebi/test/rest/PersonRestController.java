@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @Api(tags = "Person Entity")
 @RequestMapping(path = "persons")
-public class PersonController {
+public class PersonRestController {
 
     @Autowired
     private PersonRepository personRepository;

@@ -1,5 +1,6 @@
 package uk.ac.ebi.test.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
@@ -19,32 +20,38 @@ public class Person {
 
     @Id
     @GeneratedValue
+    @ApiModelProperty(position = 1, value = "Auto generated id", readOnly = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
-
-    @ApiModelProperty(position = 1, required = true)
-    @NotNull
-    @Column(nullable = false)
-    private String first_name;
 
     @ApiModelProperty(position = 2, required = true)
     @NotNull
     @Column(nullable = false)
-    private String last_name;
+    private String first_name;
 
     @ApiModelProperty(position = 3, required = true)
+    @NotNull
+    @Column(nullable = false)
+    private String last_name;
+
+    @ApiModelProperty(position = 4, required = true, example = "10")
     @NotNull
     @Min(1)
     @Column(nullable = false)
     private int age;
 
-    @ApiModelProperty(position = 4, required = true)
+    @ApiModelProperty(position = 5, required = true)
     @NotNull
     @Column(nullable = false)
     private String favourite_color;
 
-    @ApiModelProperty(position = 5)
+    @ApiModelProperty(position = 6)
     @ElementCollection
     private List<String> hobby;
+
+    public long getId() {
+        return id;
+    }
 
     public String getFirst_name() {
         return first_name;

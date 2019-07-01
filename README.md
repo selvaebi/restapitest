@@ -30,34 +30,51 @@ Simple REST API test with Swagger UI
   Root url / is a unsecured service that can be accessed without credentials , i.e.
 
 ```
-curl http://localhost:8080
+> curl http://localhost:8080
 
 ```
 
-  The rest of the services require a form login if you are accessing via browser. So the API is accessed via a 
-  OpenAPI standard Swagger Tool on the url <http://localhost:8080/swagger-ui.html> on the browser, which 
-  redirects 
-  initially to a form login page , which can be logged in with below credentials
+  The rest of the services are protected by JWT Role Based Authorization with Spring Security. So the API is can be 
+  via a OpenAPI standard Swagger Tool on the url <http://localhost:8080/swagger-ui.html> on the browser
   
   The API is protect by default security users with below credentials
-  * user@ebi.ac.uk/user - with access only to GET methods
-  * admin@ebi.ac.uk/admin - with access to all methods. 
+  * user@ebi.ac.uk/user - with access only to GET methods having ony ROLE_USER
+  * admin@ebi.ac.uk/admin - with access to all methods having ROLE_ADMIN
   
-  In order to access endpoints via command line curl follow the below steps
+  In order to access endpoints we need to get the access token from login endpoint
 ```
-curl -c cookie.txt -F 'username=user@ebi.ac.uk' -F 'password=user' localhost:8080/login
+> curl -X POST -d 'email=user@ebi.ac.uk&password=user' localhost:8080/login
 
-curl -b cookie.txt localhost:8080/persons
-
-curl -b cookie.txt localhost:8080/logout 
+Returns Bearer Token -> {"Authorization":"Bearer ey...."}
+```
+  Copy paste the token including word Bearer in the value box after clicking Authorize button in the top right corner
+   of Swagger. eg. "Bearer eyfhj.kslkf" and click close. And so afterwards you can try the endpoints.
+   
+   Can try using curl command as well passing the token in the header like below,
 
 ```
-To add more security users we can post user entity logged in using admin credentials.
+> curl -X GET "http://localhost:8080/persons" -H "accept: application/json" -H "Authorization: Bearer eyJh"
 
 ```
- curl -c cookie.txt -F 'username=admin@ebi.ac.uk' -F 'password=admin' localhost:8080/login
+New users can signup using /securityUsers/sign-up url.
+
+```
+ > curl -X POST -d 'email=user1@ebi.ac.uk&password=user' localhost:8080/securityUsers/sign-up
  
- curl -b cookie.txt -X POST "http://localhost:8080/securityUsers" -H "Content-Type: application/json" -d "{ \"email\": \"newuser@ebi.ac.uk\", \"password\": \"newuser\", \"role\": \"ROLE_USER\"}"
+ > curl -X POST -d 'email=user1@ebi.ac.uk&password=user' localhost:8080/login
+ ```
+ A user's role can only be changed by admin using /securityUsers/changeRoles url
+ ```
+ > curl -X POST -d 'email=admin@ebi.ac.uk&password=admin' localhost:8080/login
+  
+ Returns Bearer Token -> {"Authorization":"Bearer ey...."}
+  ```
+  
+  ```
+  Then change role of user1
+   
+ > curl -X POST -d 'email=user1@ebi.ac.uk&role=ROLE_ADMIN' localhost:8080/securityUsers/changeRoles \
+ -H "Authorization:Bearer eyJh"
  ```
 
 

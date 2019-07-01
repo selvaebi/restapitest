@@ -6,20 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
 public class SecurityUser {
 
-    @Id
-    @GeneratedValue
-    private long id;
-
     @Email
     @Column(nullable = false)
     @NotNull
+    @Id
     private String email;
 
     @NotNull
@@ -30,6 +26,15 @@ public class SecurityUser {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public SecurityUser() {
+    }
+
+    public SecurityUser(String email, String password, Role role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     public String getEmail() {
         return email;
